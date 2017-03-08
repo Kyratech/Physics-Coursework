@@ -1,5 +1,5 @@
 /*
- * This is a very simple example of using Bullet
+ * Program to demonstrate elastic collisions in a 3d cube
 */
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,22 +10,19 @@
 
 FILE *flog;
 
-const double PI = 3.141592653589793;
-const double PIo2 = PI/2.;
-const double PIo4 = PI/4.;
-const double PI2 = PI * 2.;
-const float lod = PI/32.;
+#include "include/CubeGeometry.h"
+#include "include/UVSphereGeometry.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "include/TriangleMesh.h"
+#include "include/PhysicsObject.h"
+
+
+//Want to get rid of these eventually
 #include "include/VertexBufferObject.h"
 #include "include/glslprogram.h"
 #include "include/stb_image.h"
 #include "include/utils.h"
+
 /*
  * Set up bullet - globals.
  */
@@ -39,10 +36,41 @@ btDiscreteDynamicsWorld* dynamicsWorld;
 
 std::vector<btRigidBody*> MovingBits; // so that can get at all bits
 std::vector<btRigidBody*> StaticBits; // especially during clean up.
+
+/* Screen parameters */
+const int width = 800;
+const int height = 800;
+
+/* Functions to handle input */
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
+void mouse_movement(GLFWwindow *window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void scroll_callback(GLFWwindow* window, double xpos, double ypos);
+
+/* Stuff to read the mouse input to move the camera */
+GLfloat lastX = width / 2.0;
+GLfloat lastY = height / 2.0;
+
+bool firstMouseInput = true;
+
+//Mouse button flags
+bool middleMouse = false;
+
+//Key pressed flags
+bool keys[1024];
+
+//For calculating delta time
+GLfloat deltaTime = 0.0f;
+GLfloat lastFrame = 0.0f;
+
+bool stillRunning = true;
+
+
 /*
  * Bullet Code
  */
-btRigidBody* SetSphere(float size, btTransform T) {
+btRigidBody* SetSphere(float size, btTransform T)
+{
     btCollisionShape* fallshape = new btSphereShape(size);
     btDefaultMotionState* fallMotionState = new btDefaultMotionState(T);
     btScalar mass = 1;
@@ -54,8 +82,10 @@ btRigidBody* SetSphere(float size, btTransform T) {
     fallRigidBody->setRestitution(COE);
     dynamicsWorld->addRigidBody(fallRigidBody);
     return fallRigidBody;
-    }
-void bullet_init() {
+}
+
+void bullet_init()
+{
     /*
      * set up world
      */
@@ -117,8 +147,10 @@ void bullet_init() {
     Print("Setup Bullet ");
     int n = MovingBits.size();
     print(n);
-    }
-glm::vec3 bullet_step(int i) {
+}
+
+glm::vec3 bullet_step(int i)
+{
     btTransform trans;
     btRigidBody* moveRigidBody;
     int n = MovingBits.size();
@@ -126,8 +158,10 @@ glm::vec3 bullet_step(int i) {
     dynamicsWorld->stepSimulation(1/60.f,10);
     moveRigidBody->getMotionState()->getWorldTransform(trans);
     return glm::vec3(trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ());
-    }
-void bullet_close() {
+}
+
+void bullet_close()
+{
     /*
      * This is very minimal and relies on OS to tidy up.
      */
@@ -141,8 +175,10 @@ void bullet_close() {
     delete collisionConfiguration;
     delete dispatcher;
     delete broadphase;
-    }
-void Render(int i, GLSLProgram O, VertexBufferObject vb) {
+}
+/*
+void Render(int i, GLSLProgram O, VertexBufferObject vb)
+{
     glm::mat4 Projection = glm::mat4(1.0f);
     Projection = glm::ortho(-55., 55., -5., 105., -100., 100.);
     glm::mat4 View = glm::mat4(1.);
@@ -160,12 +196,8 @@ void Render(int i, GLSLProgram O, VertexBufferObject vb) {
         }
     fprintf(flog, "\n");
     vb.DeSelectVAO();
-    }
-
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_Q) && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
+}
+*/
 VertexBufferObject makeWireBoxMesh(void) {
     VertexBufferObject Box;
     Box.vboName = "Box";
@@ -215,97 +247,166 @@ VertexBufferObject makeWireCircleMesh(float radius) {
     return Circle;
     }
 
-int main( void ) {
-    int k = 0;
-    bool good;
-    GLFWwindow* window;
-    if( !glfwInit() ) {
-        printf("Failed to start GLFW\n");
-        exit( EXIT_FAILURE );
-        }
-    window = glfwCreateWindow(640, 480, "Visible axies", NULL, NULL);
-    if (!window) {
-        glfwTerminate();
-        printf("GLFW Failed to start\n");
-        return -1;
-        }
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window); // IMPORTANT: Must be done so glew recognises OpenGL
-    glewExperimental = GL_TRUE;
-    int err = glewInit();
-    if (GLEW_OK != err) {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-        }
-    fprintf(stderr, "Glew done\n");
-    glfwSetKeyCallback(window, key_callback);
-    fprintf(stderr, "GL INFO %s\n", glGetString(GL_VERSION));
-    /*
-     * Vertex information
-     */
-    VertexBufferObject Circle = makeWireCircleMesh(5.);
-    VertexBufferObject Box  = makeWireBoxMesh();
-    /*
-     * shader programs for circle.
-     */
-    GLSLProgram O2;
-    O2.SetVerbose(true);
-    O2.SetGstap(false);
-    good = O2.Create("box.vert", "box.frag");
-    if( !good ) {
-        fprintf( stderr, "GLSL Program wasn’t created.\n" );
-        exit(0);
-        }
-    Circle.SelectVAO();
-    O2.SetAttribute( "aPosition", Circle, VERTEX_ATTRIBUTE ); // or NORMAL_ATTRIBUTE or TEXTURE_ATTRIBUTE or ...
-    Circle.DeSelectVAO();
-    /*
-     * shader programs for boundary.
-     */
-    GLSLProgram O3;
-    O3.SetVerbose(true);
-    O3.SetGstap(false);
-    good = O3.Create("box.vert", "box.frag");
-    if( !good ) {
-        fprintf( stderr, "GLSL Program wasn’t created.\n" );
-        exit(0);
-        }
-    Box.SelectVAO();
-    O3.SetAttribute( "aPosition", Box, VERTEX_ATTRIBUTE ); // or NORMAL_ATTRIBUTE or TEXTURE_ATTRIBUTE or ...
-    Box.DeSelectVAO();
+int main( void )
+{
+    /* Attempt to initialise GLFW3, the window manager */
+	if(!glfwInit())
+	{
+		std::cout << "Failed to start GLFW3" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	/* Set up the main window */
+	GLFWwindow* window = glfwCreateWindow(width, height, "Coursework 1", NULL, NULL);
+	if(!window)
+	{
+		std::cout << "Failed to create GLFW window." << std::endl;
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+
+	/* Set the required callback functions */
+	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window, mouse_movement);
+	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+	/* Set up GLEW before using any OpenGL functions */
+	glewExperimental = GL_TRUE;
+	if(glewInit() != GLEW_OK)
+	{
+		std::cout << "Failed to initialise GLEW." << std::endl;
+		return -1;
+	}
+
+	/* Tell OpenGL the size of the rendering window */
+	glViewport(0, 0, width, height);
+
+	/* Turn on depth testing to make stuff in front actually look like it's in front. */
+	glEnable(GL_DEPTH_TEST);
+
+    /*Draw wireframes */
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	/* Load the shader program */
+    Shader unshadedShader("shader/UnshadedDefault.vert", "shader/UnshadedDefault.frag");
+
+    /* Some colours to use later */
+    GLfloat red[3] = {1.0f, 0.0f, 0.0f};
+    GLfloat yellow[3] = {1.0f, 1.0f, 0.0f};
+    GLfloat green[3] = {0.0f, 0.8f, 0.0f};
+    GLfloat cyan[3] = {0.0f, 0.5f, 1.0f};
+    GLfloat white[3] = {1.0f, 1.0f, 1.0f};
+
+    /* Create some physics objects to add to the simulation */
+
+    /* Create a sphere object*/
+	int segments = 10;
+	int rings = 10;
+	double radius = 1.0;
+    TriangleMesh sphereMesh(GetSpherePhong(segments, rings, radius), white);
+    PhysicsObject sphereObject(&sphereMesh, glm::vec3(0.0f), glm::quat());
+
+    /* Main loop */
+	while(!glfwWindowShouldClose(window) && stillRunning)
+	{
+	    //Calculate the time since the last frame
+		GLfloat currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		glfwPollEvents();
+
+		/* Rendering commands */
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //Black
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		/* Generate the view matrix */
+		glm::mat4 view;
+		view = camera.GetViewMatrix();
+		/* Generate the projection matrix */
+		glm::mat4 projection;
+		projection = glm::perspective(glm::radians(camera.Fov), (GLfloat)width / (GLfloat)width, 0.1f, 100.0f);
+
+        unshadedShader.Use();
+        sphereObject.Draw(unshadedShader, view, projection);
+
+		glfwSwapBuffers(window);
+	}
+
+	/* Terminate properly */
+	glfwTerminate();
+	return 0;
+}
+
+/*
+* Record the states of keys when one changes
+*/
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	//Check to see if a new key has been pressed or released
+	if (action == GLFW_PRESS)
+	{
+		keys[key] = true;
+
+        if(keys[GLFW_KEY_Q] || keys[GLFW_KEY_ESCAPE])
+            stillRunning = false; //Set the flag to close next frame
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		keys[key] = false;
+	}
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.scroll_input(yoffset);
+}
+
+/*
+* Record the changes in position of the mouse, use it to update the camera
+*/
+void mouse_movement(GLFWwindow *window, double xPos, double yPos)
+{
+	if (firstMouseInput)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouseInput = false;
+	}
+
+	//Difference between current moose position and previous
+	GLfloat deltaX = xPos - lastX;
+	GLfloat deltaY = lastY - yPos;
+
+	//Update previous
+	lastX = xPos;
+	lastY = yPos;
 
 
-    bullet_init(); // set up physics
+	if (middleMouse)
+	{
+		if (keys[GLFW_KEY_LEFT_SHIFT])
+			camera.pan_camera(deltaX, deltaY);
+		else
+			camera.move_camera(deltaX, deltaY);
+	}
+}
 
-    glEnable(GL_DEPTH_TEST);
-    Check("Before render loop");
-    glClearColor(0.0, 0., 0., 1.0);/* Make our background black */
-    flog = fopen("velocity.log", "w");
-    print("Starting to render");
-    while(!glfwWindowShouldClose(window)) { // Main loop
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glm::mat4 Projection = glm::mat4(1.0f);
-        Projection = glm::ortho(-55., 55., -5., 105., -100., 100.);
-        glm::mat4 View = glm::mat4(1.);
-        glm::mat4 Model = glm::mat4(1.);
-        O3.Use();
-        O3.SetUniform("uProjection", Projection);
-        O3.SetUniform("uView", View);
-        O3.SetUniform("uModel", Model);
-        Box.SelectVAO();
-        Box.Draw();
-        Box.DeSelectVAO();
-        O2.Use();
-        k++;
-        Render(k, O2, Circle);
-        glFlush();
-        glfwSwapBuffers(window);// Swap front and back rendering buffers
-        glfwPollEvents(); // Poll for events.
-        }
-    void bullet_close();
-    glfwTerminate();// Close window and terminate GLFW
-    exit( EXIT_SUCCESS );// Exit program
-    }
+/*
+* Record the state of the middle mouse when it changes
+*/
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
+		middleMouse = true;
+	else if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE)
+		middleMouse = false;
+}
 
 
 

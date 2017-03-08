@@ -1,6 +1,8 @@
 #ifndef INTRO_H
 #define INTRO_H
 
+#include <vector>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -11,8 +13,11 @@
 #include "ShaderLoader.h"
 #include "BLCamera.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image/stb_image.h"
+const double PI = 3.141592653589793;
+const double PIo2 = PI/2.;
+const double PIo4 = PI/4.;
+const double PI2 = PI * 2.;
+const float lod = PI/32.;
 
 //static const AMBIENT_STRENGTH = 0.1f;
 static const glm::vec3 LIGHT_COLOUR = glm::vec3(0.8f, 0.8f, 0.8f);

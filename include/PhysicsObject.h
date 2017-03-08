@@ -1,16 +1,16 @@
-#ifndef GRAPHICS_OBJECT_H
-#define GRAPHICS_OBJECT_H
+#ifndef PHYSICS_OBJECT_H
+#define PHYSICS_OBJECT_H
 
-#include "Introduction.h"
+#include "PhysicsDemo.h"
 
-class GraphicsObject
+class PhysicsObject
 {
 public:
     Mesh* mesh;
     glm::vec3 worldPosition;
     glm::quat rotation;
 
-    GraphicsObject(Mesh* myMesh, glm::vec3 initialPosition, glm::quat initialRotation)
+    PhysicsObject(Mesh* myMesh, glm::vec3 initialPosition, glm::quat initialRotation)
     {
         mesh = myMesh;
         worldPosition = initialPosition;
@@ -56,4 +56,4 @@ public:
     }
 };
 
-#endif // GRAPHICS_OBJECT_H
+#endif // PHYSICS_OBJECT_H

@@ -7,7 +7,7 @@ class TriangleMesh: public Mesh
 {
 public:
     /* Constructor */
-    TriangleMesh(const std::vector<struct Vertex> vertices, const GLchar* texturePath, GLfloat colour[3])
+    TriangleMesh(const std::vector<struct Vertex> vertices, GLfloat colour[3])
     {
         vertexCount = vertices.size();
         r = colour[0];
@@ -34,37 +34,6 @@ public:
         glEnableVertexAttribArray(2);
 
         glBindVertexArray(0);
-
-        //Generate the texture
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        //Set the wrapping style to repeat (This is on by default, but the code is here for completeness)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        //Set the texture filtering to nearest (again, only for completeness as it is the default)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        //Load in the texture
-        int width, height, n;
-        unsigned char* image = stbi_load(texturePath, &width, &height, &n, 3);
-        if(image != NULL)
-        {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-            glGenerateMipmap(GL_TEXTURE_2D);
-            std::cout << "Loaded texture at: " << texturePath << std::endl;
-            std::cout << "Image stats: " << width << ", " << height << ", " << n << std::endl;
-            std::cout << "First four bytes: " << (int)image[0] << ", " << (int)image[1] << ", " << (int)image[2] << ", " << (int)image[3] << std::endl;
-        }
-        else
-        {
-            std::cout << "Failed to load texture at: " << texturePath << std::endl;
-        }
-        //Clean-up
-        stbi_image_free(image);
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     /* Draw the mesh with the supplied texture */
@@ -83,17 +52,13 @@ public:
         GLint viewPosLocation = glGetUniformLocation(shader.getShaderProgram(), "viewPos");
         glUniform3f(viewPosLocation, camera.GetCameraPosition().x, camera.GetCameraPosition().y, camera.GetCameraPosition().z);
 
-        glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(glGetUniformLocation(shader.getShaderProgram(), "ourTexture"), 0);
-
 		glBindVertexArray(this->VAO);
         glDrawArrays(GL_TRIANGLES, 0, vertexCount);
         glBindVertexArray(0);
     }
 
 private:
-    GLuint VAO, VBO, texture;
+    GLuint VAO, VBO;
     int vertexCount;
     GLfloat r,g,b;
     glm::vec3 fragmentColour;

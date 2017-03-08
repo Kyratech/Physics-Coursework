@@ -1,7 +1,7 @@
 #ifndef UV_SPHERE_H
 #define UV_SPHERE_H
 
-#include "Introduction.h"
+#include "PhysicsDemo.h"
 #include <math.h>
 #include <iostream>
 

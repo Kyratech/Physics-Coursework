@@ -1,7 +1,7 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "Introduction.h"
+#include "PhysicsDemo.h"
 
 const std::vector<struct Vertex> GetCubeGeometry(double sideLength)
 {

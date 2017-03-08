@@ -1,20 +1,14 @@
 # depslib dependency file v1.0
-1489001304 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
+1489007313 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 	<math.h>
 	"include/World.h"
-	<GL/glew.h>
-	<GLFW/glfw3.h>
-	<glm/glm.hpp>
-	<glm/gtx/transform.hpp>
-	<glm/gtc/matrix_transform.hpp>
-	<glm/gtc/type_ptr.hpp>
-	"include/VertexBufferObject.h"
-	"include/glslprogram.h"
-	"include/stb_image.h"
-	"include/utils.h"
+	"include/CubeGeometry.h"
+	"include/UVSphereGeometry.h"
+	"include/TriangleMesh.h"
+	"include/PhysicsObject.h"
 	<btBulletDynamicsCommon.h>
 
 1424961805 e:\documents\university\graphics\cw_physics\cwp\include\world.h
@@ -611,4 +605,42 @@
 
 1489001804 source:e:\documents\university\graphics\cw_physics\cwp\vertexbufferobject.cpp
 	"include/VertexBufferObject.h"
+
+1489006433 e:\documents\university\graphics\cw_physics\cwp\include\cubegeometry.h
+	"PhysicsDemo.h"
+
+1489006535 e:\documents\university\graphics\cw_physics\cwp\include\physicsdemo.h
+	<vector>
+	<GL/glew.h>
+	<GLFW/glfw3.h>
+	<glm/glm.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/type_ptr.hpp>
+	"ShaderLoader.h"
+	"BLCamera.h"
+
+1488125794 e:\documents\university\graphics\cw_physics\cwp\include\shaderloader.h
+	<string>
+	<fstream>
+	<sstream>
+	<iostream>
+	<GL/glew.h>
+
+1489006447 e:\documents\university\graphics\cw_physics\cwp\include\blcamera.h
+	"PhysicsDemo.h"
+
+1489006440 e:\documents\university\graphics\cw_physics\cwp\include\uvspheregeometry.h
+	"PhysicsDemo.h"
+	<math.h>
+	<iostream>
+
+1489006678 e:\documents\university\graphics\cw_physics\cwp\include\trianglemesh.h
+	"Mesh.h"
+
+1489005793 e:\documents\university\graphics\cw_physics\cwp\include\mesh.h
+	<iostream>
+	"PhysicsDemo.h"
+
+1489007128 e:\documents\university\graphics\cw_physics\cwp\include\physicsobject.h
+	"PhysicsDemo.h"
 

@@ -10,18 +10,14 @@
 
 FILE *flog;
 
+//
+
 #include "include/CubeGeometry.h"
 #include "include/UVSphereGeometry.h"
+#include "include/PlaneGeomtery.h"
 
 #include "include/TriangleMesh.h"
 #include "include/PhysicsObject.h"
-
-
-//Want to get rid of these eventually
-#include "include/VertexBufferObject.h"
-#include "include/glslprogram.h"
-#include "include/stb_image.h"
-#include "include/utils.h"
 
 /*
  * Set up bullet - globals.
@@ -144,9 +140,11 @@ void bullet_init()
      */
     MovingBits.push_back(SetSphere(5., btTransform(btQuaternion(0,0,0,1),btVector3(-10,25,0))));
 
+    /*
     Print("Setup Bullet ");
     int n = MovingBits.size();
     print(n);
+    */
 }
 
 glm::vec3 bullet_step(int i)
@@ -176,76 +174,6 @@ void bullet_close()
     delete dispatcher;
     delete broadphase;
 }
-/*
-void Render(int i, GLSLProgram O, VertexBufferObject vb)
-{
-    glm::mat4 Projection = glm::mat4(1.0f);
-    Projection = glm::ortho(-55., 55., -5., 105., -100., 100.);
-    glm::mat4 View = glm::mat4(1.);
-    glm::mat4 Model = glm::mat4(1.);
-    O.Use();
-    vb.SelectVAO();
-    O.SetUniform("uProjection", Projection);
-    O.SetUniform("uView", View);
-    for(int i = 0 ; i < MovingBits.size(); i++) { // loop over shapes
-        glm::vec3 position = bullet_step(i);
-        fprintf(flog, "%f %f %f ", position[0], position[1], position[2]);
-        Model = glm::translate(position);
-        O.SetUniform("uModel", Model);
-        vb.Draw();
-        }
-    fprintf(flog, "\n");
-    vb.DeSelectVAO();
-}
-*/
-VertexBufferObject makeWireBoxMesh(void) {
-    VertexBufferObject Box;
-    Box.vboName = "Box";
-    Box.SetVerbose(true);
-    Box.CollapseCommonVertices( false );
-    Box.SetTol( .001f );// how close need to be to collapse vertices, ignored at the moment.
-    Box.UseBufferObjects(true); // Not needed as this is the only option.
-    Box.glBegin( GL_LINES );
-
-    Box.glVertex3f(0., 0., 0.);
-    Box.glVertex3f(-50., 0., 0.);
-
-    Box.glVertex3f(-50., 0., 0.);
-    Box.glVertex3f(-50., 100., 0.);
-
-    Box.glVertex3f(-50., 100., 0.);
-    Box.glVertex3f(50., 100., 0.);
-
-    Box.glVertex3f(50., 100., 0.);
-    Box.glVertex3f(50., 0., 0.);
-
-    Box.glVertex3f(50., 0., 0.);
-    Box.glVertex3f(0., 0., 0.);
-    Box.glEnd();
-    Box.Print();
-    return Box;
-    }
-
-VertexBufferObject makeWireCircleMesh(float radius) {
-    VertexBufferObject Circle;
-    Circle.vboName = "Circle";
-    Circle.SetVerbose(true);
-    Circle.CollapseCommonVertices( false );
-    Circle.SetTol( .001f );// how close need to be to collapse vertices, ignored at the moment.
-    Circle.UseBufferObjects(true); // Not needed as this is the only option.
-    float theta;
-    const float Radius = radius;
-    Circle.glBegin( GL_LINES );
-    glm::vec3 p, n;
-    for(theta = 0.0f; theta < PI2; theta += lod) {
-        Circle.glVertex3f(Radius * cos(theta), Radius * sin(theta), 0.);
-        Circle.glVertex3f(Radius * cos(theta + lod), Radius * sin(theta + lod), 0.);
-        }
-    Circle.glEnd();
-    Circle.Print();
-    Circle.makeObj("Circle.obj");
-    return Circle;
-    }
 
 int main( void )
 {

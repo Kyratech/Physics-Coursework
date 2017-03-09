@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1489007313 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
+1489068199 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
@@ -7,11 +7,13 @@
 	"include/World.h"
 	"include/CubeGeometry.h"
 	"include/UVSphereGeometry.h"
+	"include/PlaneGeomtery.h"
+	"include/BulletWorld.h"
+	"include/BulletSphere.h"
 	"include/TriangleMesh.h"
 	"include/PhysicsObject.h"
-	<btBulletDynamicsCommon.h>
 
-1424961805 e:\documents\university\graphics\cw_physics\cwp\include\world.h
+1489068100 e:\documents\university\graphics\cw_physics\cwp\include\world.h
 
 1420735000 e:\documents\university\graphics\cw_physics\cwp\include\vertexbufferobject.h
 	<GL/glew.h>
@@ -609,13 +611,14 @@
 1489006433 e:\documents\university\graphics\cw_physics\cwp\include\cubegeometry.h
 	"PhysicsDemo.h"
 
-1489006535 e:\documents\university\graphics\cw_physics\cwp\include\physicsdemo.h
+1489066677 e:\documents\university\graphics\cw_physics\cwp\include\physicsdemo.h
 	<vector>
 	<GL/glew.h>
 	<GLFW/glfw3.h>
 	<glm/glm.hpp>
 	<glm/gtc/matrix_transform.hpp>
 	<glm/gtc/type_ptr.hpp>
+	<btBulletDynamicsCommon.h>
 	"ShaderLoader.h"
 	"BLCamera.h"
 
@@ -641,6 +644,41 @@
 	<iostream>
 	"PhysicsDemo.h"
 
-1489007128 e:\documents\university\graphics\cw_physics\cwp\include\physicsobject.h
+1489067907 e:\documents\university\graphics\cw_physics\cwp\include\physicsobject.h
 	"PhysicsDemo.h"
+
+1489067416 source:e:\documents\university\graphics\cw_physics\cwp\bulletbody.cpp
+	"include/BulletBody.h"
+	"include/BulletWorld.h"
+
+1489067368 e:\documents\university\graphics\cw_physics\cwp\include\bulletbody.h
+	<btBulletDynamicsCommon.h>
+	<glm/glm.hpp>
+	<glm/gtx/quaternion.hpp>
+
+1489067046 e:\documents\university\graphics\cw_physics\cwp\include\bulletworld.h
+	<btBulletDynamicsCommon.h>
+	<glm/glm.hpp>
+
+1489067428 source:e:\documents\university\graphics\cw_physics\cwp\bulletsphere.cpp
+	"include/BulletSphere.h"
+	"include/BulletWorld.h"
+
+1489008985 e:\documents\university\graphics\cw_physics\cwp\include\bulletsphere.h
+	"BulletBody.h"
+	<string>
+	<vector>
+
+1489067395 source:e:\documents\university\graphics\cw_physics\cwp\bulletworld.cpp
+	"include/BulletWorld.h"
+	"include/BulletBody.h"
+	<iostream>
+
+1489007527 e:\documents\university\graphics\cw_physics\cwp\include\planegeomtery.h
+	"PhysicsDemo.h"
+
+1489066420 source:e:\documents\university\graphics\cw_physics\cwp\test.cpp
+	"include/test.h"
+
+1489066377 e:\documents\university\graphics\cw_physics\cwp\include\test.h
 

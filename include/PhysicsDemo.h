@@ -1,5 +1,5 @@
-#ifndef INTRO_H
-#define INTRO_H
+#ifndef PHYSICS_DEMO_H
+#define PHYSICS_DEMO_H
 
 #include <vector>
 
@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <btBulletDynamicsCommon.h>
 
 #include "ShaderLoader.h"
 #include "BLCamera.h"

@@ -26,16 +26,23 @@
 				</Linker>
 			</Target>
 		</Build>
+		<Unit filename="BulletBody.cpp" />
+		<Unit filename="BulletSphere.cpp" />
+		<Unit filename="BulletWorld.cpp" />
 		<Unit filename="PT3.cpp" />
-		<Unit filename="glslprogram.cpp" />
+		<Unit filename="include/BLCamera.h" />
+		<Unit filename="include/BulletBody.h" />
+		<Unit filename="include/BulletSphere.h" />
+		<Unit filename="include/BulletWorld.h" />
+		<Unit filename="include/CubeGeometry.h" />
+		<Unit filename="include/Mesh.h" />
+		<Unit filename="include/PhysicsDemo.h" />
+		<Unit filename="include/PhysicsObject.h" />
+		<Unit filename="include/PlaneGeomtery.h" />
+		<Unit filename="include/ShaderLoader.h" />
+		<Unit filename="include/TriangleMesh.h" />
+		<Unit filename="include/UVSphereGeometry.h" />
 		<Unit filename="include/World.h" />
-		<Unit filename="include/glslprogram.h" />
-		<Unit filename="include/stb_image.h" />
-		<Unit filename="include/utils.h" />
-		<Unit filename="include/vertexbufferobject.h" />
-		<Unit filename="stb.cpp" />
-		<Unit filename="utils.cpp" />
-		<Unit filename="vertexbufferobject.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

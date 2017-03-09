@@ -10,11 +10,12 @@
 
 FILE *flog;
 
-//
-
 #include "include/CubeGeometry.h"
 #include "include/UVSphereGeometry.h"
 #include "include/PlaneGeomtery.h"
+
+#include "include/BulletWorld.h"
+#include "include/BulletSphere.h"
 
 #include "include/TriangleMesh.h"
 #include "include/PhysicsObject.h"
@@ -22,7 +23,7 @@ FILE *flog;
 /*
  * Set up bullet - globals.
  */
-#include <btBulletDynamicsCommon.h>
+//
 
 btBroadphaseInterface* broadphase;
 btDefaultCollisionConfiguration* collisionConfiguration;
@@ -228,13 +229,15 @@ int main( void )
     GLfloat white[3] = {1.0f, 1.0f, 1.0f};
 
     /* Create some physics objects to add to the simulation */
+    BulletWorld* world = new BulletWorld((float) GRAVITY);
 
     /* Create a sphere object*/
 	int segments = 10;
 	int rings = 10;
 	double radius = 1.0;
     TriangleMesh sphereMesh(GetSpherePhong(segments, rings, radius), white);
-    PhysicsObject sphereObject(&sphereMesh, glm::vec3(0.0f), glm::quat());
+    BulletSphere sphereBody(radius, 1.0f, glm::vec3(0.0f), world);
+    PhysicsObject sphereObject(&sphereMesh, &sphereBody);
 
     /* Main loop */
 	while(!glfwWindowShouldClose(window) && stillRunning)
@@ -256,6 +259,8 @@ int main( void )
 		/* Generate the projection matrix */
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(camera.Fov), (GLfloat)width / (GLfloat)width, 0.1f, 100.0f);
+
+		world->stepWorld(1.0f / 60.0f);
 
         unshadedShader.Use();
         sphereObject.Draw(unshadedShader, view, projection);

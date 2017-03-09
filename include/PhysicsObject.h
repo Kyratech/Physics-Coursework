@@ -11,21 +11,23 @@ class PhysicsObject
 {
 public:
     Mesh* mesh;
-    glm::vec3 worldPosition;
-    glm::quat rotation;
+    BulletBody* body;
 
-    PhysicsObject(Mesh* myMesh, glm::vec3 initialPosition, glm::quat initialRotation)
+    PhysicsObject(Mesh* myMesh, BulletBody* physicsBody)
     {
         mesh = myMesh;
-        worldPosition = initialPosition;
-        rotation = initialRotation;
+        body = physicsBody;
     }
 
     void Draw(Shader shader, glm::mat4 view, glm::mat4 projection)
     {
+        //Get the data out of the bullet rigidbody
+        glm::vec3 bodyPosition = this->body->getPosition();
+        glm::quat bodyRotation = this->body->getRotationQuaternion();
+
         glm::mat4 model;
-        model = glm::translate(model, this->worldPosition);
-        model = glm::rotate(model, glm::angle(rotation), glm::axis(rotation));
+        model = glm::translate(model, bodyPosition);
+        model = glm::rotate(model, glm::angle(bodyRotation), glm::axis(bodyRotation));
 
         glm::mat4 MVP = projection * view * model;
 
@@ -33,16 +35,6 @@ public:
         glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(MVP));
 
         mesh->Draw(shader);
-    }
-
-    void setPostion(glm::vec3 newPos)
-    {
-        worldPosition = newPos;
-    }
-
-    void setRotation(glm::quat newRot)
-    {
-        rotation = newRot;
     }
 };
 

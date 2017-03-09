@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1489085442 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
+1489085976 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
@@ -613,7 +613,7 @@
 1489006433 e:\documents\university\graphics\cw_physics\cwp\include\cubegeometry.h
 	"PhysicsDemo.h"
 
-1489066677 e:\documents\university\graphics\cw_physics\cwp\include\physicsdemo.h
+1489086008 e:\documents\university\graphics\cw_physics\cwp\include\physicsdemo.h
 	<vector>
 	<GL/glew.h>
 	<GLFW/glfw3.h>
@@ -631,7 +631,7 @@
 	<iostream>
 	<GL/glew.h>
 
-1489006447 e:\documents\university\graphics\cw_physics\cwp\include\blcamera.h
+1489086037 e:\documents\university\graphics\cw_physics\cwp\include\blcamera.h
 	"PhysicsDemo.h"
 
 1489006440 e:\documents\university\graphics\cw_physics\cwp\include\uvspheregeometry.h

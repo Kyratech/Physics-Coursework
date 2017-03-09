@@ -33,7 +33,7 @@ struct Vertex
 };
 
 /* Set up the camera */
-glm::vec3 cameraPos = glm::vec3(0.0f, 10.0f, 0.0f);
+glm::vec3 cameraPos = glm::vec3(0.0f, 15.0f, 0.0f);
 
 ThreeD_Camera camera(cameraPos);
 

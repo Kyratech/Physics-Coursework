@@ -1,10 +1,6 @@
 #include "include/BulletPlane.h"
 #include "include/BulletWorld.h"
 
-/*
- * Creates a sphere centred on the initial position
- * Rotation irrelevent
-*/
 BulletPlane::BulletPlane(glm::vec3 normal, float normalDistance, BulletWorld* world)
 {
 	btCollisionShape* cShape = new btStaticPlaneShape(btVector3(normal.x, normal.y, normal.z), normalDistance);

@@ -17,6 +17,7 @@ FILE *flog;
 #include "include/BulletWorld.h"
 #include "include/BulletSphere.h"
 #include "include/BulletPlane.h"
+#include "include/BulletCube.h"
 
 #include "include/TriangleMesh.h"
 #include "include/PhysicsObject.h"
@@ -226,14 +227,13 @@ int main( void )
     /* Some colours to use later */
     GLfloat red[3] = {1.0f, 0.0f, 0.0f};
     GLfloat yellow[3] = {1.0f, 1.0f, 0.0f};
-    GLfloat green[3] = {0.0f, 0.8f, 0.0f};
-    GLfloat cyan[3] = {0.0f, 0.5f, 1.0f};
+    GLfloat blue[3] = {0.0f, 0.2f, 1.0f};
     GLfloat white[3] = {1.0f, 1.0f, 1.0f};
 
     /* Create some physics objects to add to the simulation */
     BulletWorld* world = new BulletWorld((float) GRAVITY);
 
-    /* Create a sphere object*/
+    /* Create 2 sphere objects*/
 	int segments = 10;
 	int rings = 10;
 	double radius = 0.5f;
@@ -243,9 +243,18 @@ int main( void )
     PhysicsObject sphereObject(&sphereMesh, &sphereBody);
     MovingBits.push_back(sphereObject);
 
+    TriangleMesh sphereMesh2(GetSpherePhong(segments, rings, radius), blue);
     BulletSphere sphereBody2(radius, 1.0f, glm::vec3(3.0f, 3.0f, 0.0f), world);
-    PhysicsObject sphereObject2(&sphereMesh, &sphereBody2);
+    PhysicsObject sphereObject2(&sphereMesh2, &sphereBody2);
     MovingBits.push_back(sphereObject2);
+
+    /* Create a cube */
+    float edgeLength = 1.0f;
+
+    TriangleMesh cubeMesh(GetCubeGeometry(edgeLength), yellow);
+    BulletCube cubeBody(edgeLength, 1.0f, glm::vec3(-3.0f, 0.0f, -3.0f), world);
+    PhysicsObject cubeObject(&cubeMesh, &cubeBody);
+    MovingBits.push_back(cubeObject);
 
     /* Create the container box */
     float boxEdge = 10.0f;

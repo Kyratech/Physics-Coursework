@@ -8,7 +8,7 @@
 class BulletCube :public BulletBody
 {
 public:
-	BulletCube(float edgeLength, float mass, glm::vec3 initialPosition, BulletWorld* world);
+	BulletCube(float edgeLength, float mass, glm::vec3 initialPosition, glm::vec3 initialVelocity, BulletWorld* world);
 };
 
 #endif

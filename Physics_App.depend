@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1489078084 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
+1489085442 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
@@ -11,10 +11,11 @@
 	"include/BulletWorld.h"
 	"include/BulletSphere.h"
 	"include/BulletPlane.h"
+	"include/BulletCube.h"
 	"include/TriangleMesh.h"
 	"include/PhysicsObject.h"
 
-1489068100 e:\documents\university\graphics\cw_physics\cwp\include\world.h
+1489085512 e:\documents\university\graphics\cw_physics\cwp\include\world.h
 
 1420735000 e:\documents\university\graphics\cw_physics\cwp\include\vertexbufferobject.h
 	<GL/glew.h>
@@ -661,11 +662,12 @@
 	<btBulletDynamicsCommon.h>
 	<glm/glm.hpp>
 
-1489067428 source:e:\documents\university\graphics\cw_physics\cwp\bulletsphere.cpp
+1489085169 source:e:\documents\university\graphics\cw_physics\cwp\bulletsphere.cpp
 	"include/BulletSphere.h"
 	"include/BulletWorld.h"
+	"include/World.h"
 
-1489008985 e:\documents\university\graphics\cw_physics\cwp\include\bulletsphere.h
+1489085158 e:\documents\university\graphics\cw_physics\cwp\include\bulletsphere.h
 	"BulletBody.h"
 	<string>
 	<vector>
@@ -683,20 +685,22 @@
 
 1489066377 e:\documents\university\graphics\cw_physics\cwp\include\test.h
 
-1489078334 source:e:\documents\university\graphics\cw_physics\cwp\bulletplane.cpp
+1489085612 source:e:\documents\university\graphics\cw_physics\cwp\bulletplane.cpp
 	"include/BulletPlane.h"
 	"include/BulletWorld.h"
+	"include/World.h"
 
 1489076034 e:\documents\university\graphics\cw_physics\cwp\include\bulletplane.h
 	"BulletBody.h"
 	<string>
 	<vector>
 
-1489078473 source:e:\documents\university\graphics\cw_physics\cwp\bulletcube.cpp
+1489085150 source:e:\documents\university\graphics\cw_physics\cwp\bulletcube.cpp
 	"include/BulletCube.h"
 	"include/BulletWorld.h"
+	"include/World.h"
 
-1489078284 e:\documents\university\graphics\cw_physics\cwp\include\bulletcube.h
+1489084921 e:\documents\university\graphics\cw_physics\cwp\include\bulletcube.h
 	"BulletBody.h"
 	<string>
 	<vector>

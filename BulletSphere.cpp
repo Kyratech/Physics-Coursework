@@ -1,11 +1,12 @@
 #include "include/BulletSphere.h"
 #include "include/BulletWorld.h"
+#include "include/World.h"
 
 /*
  * Creates a sphere centred on the initial position
  * Rotation irrelevent
 */
-BulletSphere::BulletSphere(float radius, float mass, glm::vec3 initialPosition, BulletWorld* world)
+BulletSphere::BulletSphere(float radius, float mass, glm::vec3 initialPosition, glm::vec3 initialVelocity, BulletWorld* world)
 {
 	btCollisionShape* cShape = new btSphereShape(radius);
 
@@ -15,6 +16,11 @@ BulletSphere::BulletSphere(float radius, float mass, glm::vec3 initialPosition, 
     cShape->calculateLocalInertia(mass, fallInertia);
     btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, mState, cShape, fallInertia);
     btRigidBody* rBody = new btRigidBody(fallRigidBodyCI);
+
+    //Set the starting velocity
+    rBody->setLinearVelocity(btVector3(initialVelocity.x, initialVelocity.y, initialVelocity.z));
+    //Set the restitution
+    rBody->setRestitution(COE);
 
 	//IMPORTANT: Store the physics data structures in the superclass fields!
 	Init(cShape, mState, rBody, world);

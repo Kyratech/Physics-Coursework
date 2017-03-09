@@ -1,5 +1,6 @@
 #include "include/BulletPlane.h"
 #include "include/BulletWorld.h"
+#include "include/World.h"
 
 BulletPlane::BulletPlane(glm::vec3 normal, float normalDistance, BulletWorld* world)
 {
@@ -11,6 +12,8 @@ BulletPlane::BulletPlane(glm::vec3 normal, float normalDistance, BulletWorld* wo
 	btRigidBody::btRigidBodyConstructionInfo cInfo(0, mState, cShape, btVector3(0, 0, 0));
 
 	btRigidBody* rBody = new btRigidBody(cInfo);
+
+	rBody->setRestitution(COE);
 
 	//IMPORTANT: Store the physics data structures in the superclass fields!
 	Init(cShape, mState, rBody, world);

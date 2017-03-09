@@ -239,12 +239,12 @@ int main( void )
 	double radius = 0.5f;
 
     TriangleMesh sphereMesh(GetSpherePhong(segments, rings, radius), red);
-    BulletSphere sphereBody(radius, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f), world);
+    BulletSphere sphereBody(radius, 1.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(-5.0f, -4.0f, -5.0f), world);
     PhysicsObject sphereObject(&sphereMesh, &sphereBody);
     MovingBits.push_back(sphereObject);
 
     TriangleMesh sphereMesh2(GetSpherePhong(segments, rings, radius), blue);
-    BulletSphere sphereBody2(radius, 1.0f, glm::vec3(3.0f, 3.0f, 0.0f), world);
+    BulletSphere sphereBody2(radius, 1.0f, glm::vec3(3.0f, 3.0f, 0.0f), glm::vec3(-2.0f, -2.0f, -1.0f), world);
     PhysicsObject sphereObject2(&sphereMesh2, &sphereBody2);
     MovingBits.push_back(sphereObject2);
 
@@ -252,16 +252,38 @@ int main( void )
     float edgeLength = 1.0f;
 
     TriangleMesh cubeMesh(GetCubeGeometry(edgeLength), yellow);
-    BulletCube cubeBody(edgeLength, 1.0f, glm::vec3(-3.0f, 0.0f, -3.0f), world);
+    BulletCube cubeBody(edgeLength, 1.0f, glm::vec3(-3.0f, -3.0f, 0.0f), glm::vec3(5.0f, 5.0f, -1.0f), world);
     PhysicsObject cubeObject(&cubeMesh, &cubeBody);
     MovingBits.push_back(cubeObject);
 
     /* Create the container box */
     float boxEdge = 10.0f;
-    TriangleMesh bottomPlane(GetPlaneGeometry(boxEdge, boxEdge), white);
+    TriangleMesh planeMesh(GetPlaneGeometry(boxEdge, boxEdge), white);
+
     BulletPlane bottomBody(glm::vec3(0.0f, 1.0f, 0.0f), -boxEdge/2, world);
-    PhysicsObject bottomObject(&bottomPlane, glm::vec3(0.0f, -boxEdge/2, 0.0f), glm::vec3((float) PIo2, 0.0f, 0.0f), &bottomBody);
+    PhysicsObject bottomObject(&planeMesh, glm::vec3(0.0f, -boxEdge/2, 0.0f), glm::vec3((float) PIo2, 0.0f, 0.0f), &bottomBody);
     StaticBits.push_back(bottomObject);
+
+    BulletPlane leftBody(glm::vec3(1.0f, 0.0f, 0.0f), -boxEdge/2, world);
+    PhysicsObject leftObject(&planeMesh, glm::vec3(-boxEdge/2, 0.0f, 0.0f), glm::vec3(0.0f, (float) PIo2, 0.0f), &bottomBody);
+    StaticBits.push_back(leftObject);
+
+    BulletPlane backBody(glm::vec3(0.0f, 0.0f, 1.0f), -boxEdge/2, world);
+    PhysicsObject backObject(&planeMesh, glm::vec3(0.0f, 0.0f, -boxEdge/2), glm::vec3(0.0f, 0.0f, 0.0f), &bottomBody);
+    StaticBits.push_back(backObject);
+
+    BulletPlane rightBody(glm::vec3(-1.0f, 0.0f, 0.0f), -boxEdge/2, world);
+    PhysicsObject rightObject(&planeMesh, glm::vec3(boxEdge/2, 0.0f, 0.0f), glm::vec3(0.0f, (float) PIo2, 0.0f), &bottomBody);
+    StaticBits.push_back(rightObject);
+
+    BulletPlane frontBody(glm::vec3(0.0f, 0.0f, -1.0f), -boxEdge/2, world);
+    PhysicsObject frontObject(&planeMesh, glm::vec3(0.0f, 0.0f, boxEdge/2), glm::vec3(0.0f, 0.0f, 0.0f), &bottomBody);
+    StaticBits.push_back(frontObject);
+
+    BulletPlane topBody(glm::vec3(0.0f, -1.0f, 0.0f), -boxEdge/2, world);
+    PhysicsObject topObject(&planeMesh, glm::vec3(0.0f, boxEdge/2, 0.0f), glm::vec3((float) PIo2, 0.0f, 0.0f), &bottomBody);
+    StaticBits.push_back(topObject);
+
 
     /* Main loop */
 	while(!glfwWindowShouldClose(window) && stillRunning)

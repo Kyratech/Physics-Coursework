@@ -16,6 +16,7 @@ FILE *flog;
 
 #include "include/BulletWorld.h"
 #include "include/BulletSphere.h"
+#include "include/BulletPlane.h"
 
 #include "include/TriangleMesh.h"
 #include "include/PhysicsObject.h"
@@ -25,14 +26,15 @@ FILE *flog;
  */
 //
 
+/*
 btBroadphaseInterface* broadphase;
 btDefaultCollisionConfiguration* collisionConfiguration;
 btCollisionDispatcher* dispatcher;
 btSequentialImpulseConstraintSolver* solver;
 btDiscreteDynamicsWorld* dynamicsWorld;
-
-std::vector<btRigidBody*> MovingBits; // so that can get at all bits
-std::vector<btRigidBody*> StaticBits; // especially during clean up.
+*/
+std::vector<PhysicsObject> MovingBits; // so that can get at all bits
+std::vector<PhysicsObject> StaticBits; // especially during clean up.
 
 /* Screen parameters */
 const int width = 800;
@@ -65,7 +67,7 @@ bool stillRunning = true;
 
 /*
  * Bullet Code
- */
+
 btRigidBody* SetSphere(float size, btTransform T)
 {
     btCollisionShape* fallshape = new btSphereShape(size);
@@ -85,7 +87,7 @@ void bullet_init()
 {
     /*
      * set up world
-     */
+
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
@@ -94,7 +96,7 @@ void bullet_init()
     dynamicsWorld->setGravity(btVector3(0., GRAVITY, 0));
     /*
      * Set up ground
-     */
+     *
     btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0,1,0),1);
     btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0,-1,0)));
     btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0,groundMotionState,groundShape,btVector3(0,0,0));
@@ -103,7 +105,7 @@ void bullet_init()
     dynamicsWorld->addRigidBody(groundRigidBody);
     /*
      * Set up left
-     */
+     *
     btCollisionShape* leftShape = new btStaticPlaneShape(btVector3(1,0,0),1);
     btDefaultMotionState* leftMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(-50, 0,0)));
     btRigidBody::btRigidBodyConstructionInfo leftRigidBodyCI(0,leftMotionState,leftShape,btVector3(0,0,0));
@@ -112,7 +114,7 @@ void bullet_init()
     dynamicsWorld->addRigidBody(leftRigidBody);
     /*
      * Set up right
-     */
+     *
     btCollisionShape* rightShape = new btStaticPlaneShape(btVector3(-1,0,0),1);
     btDefaultMotionState* rightMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(50, 0,0)));
     btRigidBody::btRigidBodyConstructionInfo rightRigidBodyCI(0,rightMotionState,rightShape,btVector3(0,0,0));
@@ -121,7 +123,7 @@ void bullet_init()
     dynamicsWorld->addRigidBody(rightRigidBody);
     /*
      * Set up top
-     */
+     *
     btCollisionShape* topShape = new btStaticPlaneShape(btVector3(0,-1,0),1);
     btDefaultMotionState* topMotionState = new btDefaultMotionState(btTransform(btQuaternion(0,0,0,1),btVector3(0, 100,0)));
     btRigidBody::btRigidBodyConstructionInfo topRigidBodyCI(0,topMotionState,topShape,btVector3(0,0,0));
@@ -130,22 +132,22 @@ void bullet_init()
     dynamicsWorld->addRigidBody(topRigidBody);
     /*
      * Set up sphere 0
-     */
+     *
     MovingBits.push_back(SetSphere(5., btTransform(btQuaternion(0,0,1,1),btVector3(-10,25,0))));
     /*
      * Set up sphere 1
-     */
+     *
     MovingBits.push_back(SetSphere(5., btTransform(btQuaternion(0,0,0,1),btVector3(-10,25,0))));
     /*
      * Set up sphere 2
-     */
+     *
     MovingBits.push_back(SetSphere(5., btTransform(btQuaternion(0,0,0,1),btVector3(-10,25,0))));
 
     /*
     Print("Setup Bullet ");
     int n = MovingBits.size();
     print(n);
-    */
+    *
 }
 
 glm::vec3 bullet_step(int i)
@@ -163,7 +165,7 @@ void bullet_close()
 {
     /*
      * This is very minimal and relies on OS to tidy up.
-     */
+     *
     btRigidBody* moveRigidBody;
     moveRigidBody = MovingBits[0];
     dynamicsWorld->removeRigidBody(moveRigidBody);
@@ -175,7 +177,7 @@ void bullet_close()
     delete dispatcher;
     delete broadphase;
 }
-
+*/
 int main( void )
 {
     /* Attempt to initialise GLFW3, the window manager */
@@ -234,10 +236,23 @@ int main( void )
     /* Create a sphere object*/
 	int segments = 10;
 	int rings = 10;
-	double radius = 1.0;
-    TriangleMesh sphereMesh(GetSpherePhong(segments, rings, radius), white);
-    BulletSphere sphereBody(radius, 1.0f, glm::vec3(0.0f), world);
+	double radius = 0.5f;
+
+    TriangleMesh sphereMesh(GetSpherePhong(segments, rings, radius), red);
+    BulletSphere sphereBody(radius, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f), world);
     PhysicsObject sphereObject(&sphereMesh, &sphereBody);
+    MovingBits.push_back(sphereObject);
+
+    BulletSphere sphereBody2(radius, 1.0f, glm::vec3(3.0f, 3.0f, 0.0f), world);
+    PhysicsObject sphereObject2(&sphereMesh, &sphereBody2);
+    MovingBits.push_back(sphereObject2);
+
+    /* Create the container box */
+    float boxEdge = 10.0f;
+    TriangleMesh bottomPlane(GetPlaneGeometry(boxEdge, boxEdge), white);
+    BulletPlane bottomBody(glm::vec3(0.0f, 1.0f, 0.0f), -boxEdge/2, world);
+    PhysicsObject bottomObject(&bottomPlane, glm::vec3(0.0f, -boxEdge/2, 0.0f), glm::vec3((float) PIo2, 0.0f, 0.0f), &bottomBody);
+    StaticBits.push_back(bottomObject);
 
     /* Main loop */
 	while(!glfwWindowShouldClose(window) && stillRunning)
@@ -263,7 +278,17 @@ int main( void )
 		world->stepWorld(1.0f / 60.0f);
 
         unshadedShader.Use();
-        sphereObject.Draw(unshadedShader, view, projection);
+
+        /* Draw the moving bits */
+        for(int i = 0; i < MovingBits.size(); i++)
+        {
+            MovingBits[i].Draw(unshadedShader, view, projection);
+        }
+        /* Draw the static bits */
+        for(int i = 0; i < StaticBits.size(); i++)
+        {
+            StaticBits[i].Draw(unshadedShader, view, projection);
+        }
 
 		glfwSwapBuffers(window);
 	}

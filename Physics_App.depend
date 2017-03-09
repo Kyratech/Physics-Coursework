@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1489068199 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
+1489076794 source:e:\documents\university\graphics\cw_physics\cwp\pt3.cpp
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
@@ -10,6 +10,7 @@
 	"include/PlaneGeomtery.h"
 	"include/BulletWorld.h"
 	"include/BulletSphere.h"
+	"include/BulletPlane.h"
 	"include/TriangleMesh.h"
 	"include/PhysicsObject.h"
 
@@ -644,7 +645,7 @@
 	<iostream>
 	"PhysicsDemo.h"
 
-1489067907 e:\documents\university\graphics\cw_physics\cwp\include\physicsobject.h
+1489077795 e:\documents\university\graphics\cw_physics\cwp\include\physicsobject.h
 	"PhysicsDemo.h"
 
 1489067416 source:e:\documents\university\graphics\cw_physics\cwp\bulletbody.cpp
@@ -674,11 +675,20 @@
 	"include/BulletBody.h"
 	<iostream>
 
-1489007527 e:\documents\university\graphics\cw_physics\cwp\include\planegeomtery.h
+1489075496 e:\documents\university\graphics\cw_physics\cwp\include\planegeomtery.h
 	"PhysicsDemo.h"
 
 1489066420 source:e:\documents\university\graphics\cw_physics\cwp\test.cpp
 	"include/test.h"
 
 1489066377 e:\documents\university\graphics\cw_physics\cwp\include\test.h
+
+1489076156 source:e:\documents\university\graphics\cw_physics\cwp\bulletplane.cpp
+	"include/BulletPlane.h"
+	"include/BulletWorld.h"
+
+1489076034 e:\documents\university\graphics\cw_physics\cwp\include\bulletplane.h
+	"BulletBody.h"
+	<string>
+	<vector>
 
